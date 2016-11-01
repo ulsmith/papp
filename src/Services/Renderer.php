@@ -25,7 +25,7 @@ class Renderer extends PhpRenderer
 	 * @param string $file The partial file to load inline
 	 * @param array $args The arguments to make available by name inside the partial as [name => value]
 	 */
-	protected function partial($file, $args) {
+	protected function partial($file, $args = []) {
 		foreach ($args as $name => $arg) ${$name} = $arg;
 		require($this->basePath.$file);
 	}

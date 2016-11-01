@@ -18,6 +18,8 @@ class Application extends App
 	const ROUTES = APP_ROOT.'src/Routes.php';
 	/** @var container Slim DI Container */
 	protected $container;
+	/** @var session Session service */
+	protected $session;
 
     public function __construct()
     {
@@ -41,5 +43,17 @@ class Application extends App
 	public function loadRoutes()
 	{
 		if (file_exists(self::ROUTES)) require(self::ROUTES);
+	}
+
+	/**
+	 * run()
+	 * Starts the application
+	 */
+	public function run($silent = false)
+	{
+		$this->session = $this->container->get('Session');
+		$this->session->start();
+
+		parent::run($silent);
 	}
 }

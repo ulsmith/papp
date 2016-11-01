@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	    <title>PAPP</title>
-	</head>
+	<? $this->partial('partials/head.php') ?>
 	<body>
 	    <h1>PAPP</h1>
 		<p>PHP Application</p>
