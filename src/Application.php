@@ -24,6 +24,7 @@ class Application extends App
     public function __construct()
     {
 		$this->container = new Container();
+		$this->container->get('settings')['determineRouteBeforeAppMiddleware'] = true;
 		parent::__construct($this->container);
 	}
 
@@ -51,9 +52,14 @@ class Application extends App
 	 */
 	public function run($silent = false)
 	{
-		$this->session = $this->container->get('Session');
+		// create session
+		$this->session = $this->container->get('SessionService');
 		$this->session->start();
 
+		// middleware
+		$this->add($this->container->get("AuthenticationMiddleware"));
+
+		// run application
 		parent::run($silent);
 	}
 }

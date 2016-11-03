@@ -13,7 +13,7 @@ use Papp\Library\SecureSessionHandler;
 class Session
 {
 	/** @const LIFETIME set to one day default but changable via env vars SESSION_LIFETIME */
-    const LIFETIME = 43200;
+    const LIFETIME = 86400;
 	/** @const KEY the key to use for default encrytion if none set in env vars SESSION_KEY */
 	const KEY = '4hfjHuiUEH74fdsfdskj89Hhudy';
 
@@ -64,12 +64,14 @@ class Session
 	public function get($key = null)
 	{
 		if (!$key) return $_SESSION;
+		if (empty($_SESSION)) return false;
 
 		$temp = $_SESSION;
+
 		$parts = explode('.', $key);
 		while (count($parts)) {
 			$part = array_shift($parts);
-			if (!$temp[$part]) return false;
+			if (!isset($temp[$part])) return false;
 			$temp = $temp[$part];
 		}
 		return $temp;

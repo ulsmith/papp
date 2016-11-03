@@ -16,14 +16,17 @@ class Index
     private $container;
 	/** @var PhpRenderer view renderer for basic php template files */
 	private $renderer;
+	/** @var PhpRenderer view renderer for basic php template files */
+	private $session;
     /** @var Example sample example service injected */
     private $example;
 
     public function __construct(Container $container)
     {
         $this->container = $container;
-		$this->renderer = $container->get('Renderer');
-		$this->example = $container->get('Example');
+		$this->renderer = $container->get('RendererService');
+		$this->session = $container->get('SessionService');
+		$this->example = $container->get('ExampleService');
     }
 
 	/**
@@ -37,8 +40,9 @@ class Index
     {
 		return $this->renderer->render($response, 'index.php', [
 			'name' => 'This is data sent into the php view',
-			'example' => $this->example->test(), 
-			'test' => ['this is a test 1', 'this is a test 2']
+			'example' => $this->example->test(),
+			'test' => ['this is a test 1', 'this is a test 2'],
+			'user' => $this->session->get('user')
 		]);
     }
 }

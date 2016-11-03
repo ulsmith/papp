@@ -13,24 +13,24 @@ use Slim\Container;
 class Account
 {
     /** @var Slim\Container slims DI container */
-    private $container;
-	/** @var PhpRenderer view renderer for basic php template files */
-	private $session;
+	private $container;
 	/** @var PhpRenderer view renderer for basic php template files */
 	private $renderer;
+	/** @var Papp\Services\Authentication for handling session based authentication */
+	private $auth;
     /** @var Example sample example service injected */
     private $example;
 
     public function __construct(Container $container)
     {
         $this->container = $container;
-		$this->session = $container->get('Session');
-		$this->renderer = $container->get('Renderer');
-		$this->example = $container->get('Example');
+		$this->renderer = $container->get('RendererService');
+		$this->auth = $container->get('AuthenticationService');
+		$this->example = $container->get('ExampleService');
     }
 
 	/**
-	 * index()
+	 * login()
 	 * Default method for default controller
 	 * @param Request $request The PSR-7 message request coming into slim
 	 * @param Response $response The PSR-7 message response going out of slim
@@ -38,27 +38,37 @@ class Account
 	 */
     public function login(Request $request, Response $response, $args)
     {
-		$user = $request->getParsedBodyParam('user');
-		$password = $request->getParsedBodyParam('password');
-
-		if ($user && $password) {
-			// do login check
-			// set session
-			// redirect
+		// already logged in?
+		if ($this->auth->isLoggedIn()) {
+			header('Location: '.WEB_ROOT);
+			die();
 		}
-// $this->session->set('test.value', 'boo');
-// $this->session->delete('test');
-var_dump($this->session->get());exit;
-// session_set_cookie_params(100);
 
-// $_SESSION['test'] = 'fsfds;';
-		// var_dump($_SESSION['test']);
+		// get details
+		$user = $request->getParsedBodyParam('user');
+		$pass = $request->getParsedBodyParam('password');
 
-		// show login page
-		return $this->renderer->render($response, 'login.php', [
-			'name' => 'This is data sent into the php view',
-			'example' => $this->example->test(),
-			'test' => ['this is a test 1', 'this is a test 2']
-		]);
+		// log in user
+		if ($this->auth->login($user, $pass)) {
+			header('Location: '.WEB_ROOT);
+			die();
+		}
+
+		return $this->renderer->render($response, 'account/login.php');
+    }
+
+	/**
+	 * logout()
+	 * Default method for default controller
+	 * @param Request $request The PSR-7 message request coming into slim
+	 * @param Response $response The PSR-7 message response going out of slim
+	 * @param array $args Any arguments passed in from request
+	 */
+    public function logout(Request $request, Response $response, $args)
+    {
+		$this->auth->logout();
+
+		header('Location: '.WEB_ROOT);
+		die();
     }
 }

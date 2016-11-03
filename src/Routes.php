@@ -14,4 +14,5 @@ $this->group("/", function () {
 $this->group("/account", function () {
    $this->get("/login", Papp\Controllers\Account::class.':login')->setArgument('access', 'public');
    $this->post("/login", Papp\Controllers\Account::class.':login')->setArgument('access', 'public');
+   $this->get("/logout", Papp\Controllers\Account::class.':logout')->setArgument('access', 'public');
 });
