@@ -6,6 +6,8 @@ Offers a nice simple small base to start building your web application in one fo
 
 __Controllers/:__ Your starting point as a developer, your endpoint as matched to your URL path (configured in routes).
 
+__Library/:__ Any 3rd part tools you add that are not composer installs, mainly your own library files.
+
 __Middleware/:__ Injected as a dependency, alter all/some/one incomming or outgoing requests, with one piece of middleware pushing its output onto the next in the stack.
 
 __Models/:__ Your data abstraction layer, abstracting data access from a data source beit DB or service or something else.
