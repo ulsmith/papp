@@ -46,10 +46,10 @@ final class Authentication
 			if ($access == 'public' || $this->auth->isLoggedIn()) return $next($request, $response);
 
 			// no access
-			return $this->renderer->render($response, '401.php');
+			return $this->renderer->render($response->withStatus(401), '401.php');
 		}
 
 		// route not found
-		return $this->renderer->render($response, '404.php');
+		return $this->renderer->render($response->withStatus(404), '404.php');
     }
 }

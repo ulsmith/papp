@@ -17,7 +17,7 @@ class Index
 	/** @var PhpRenderer view renderer for basic php template files */
 	private $renderer;
 	/** @var PhpRenderer view renderer for basic php template files */
-	private $session;
+	private $auth;
     /** @var Example sample example service injected */
     private $example;
 
@@ -25,7 +25,7 @@ class Index
     {
         $this->container = $container;
 		$this->renderer = $container->get('RendererService');
-		$this->session = $container->get('SessionService');
+		$this->auth = $container->get('AuthenticationService');
 		$this->example = $container->get('ExampleService');
     }
 
@@ -42,7 +42,7 @@ class Index
 			'name' => 'This is data sent into the php view',
 			'example' => $this->example->test(),
 			'test' => ['this is a test 1', 'this is a test 2'],
-			'user' => $this->session->get('user')
+			'user' => $this->auth->getLoggedIn()
 		]);
     }
 }
